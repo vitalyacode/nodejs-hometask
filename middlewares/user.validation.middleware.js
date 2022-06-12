@@ -41,6 +41,7 @@ const updateUserValid = (req, res, next) => {
 
   try {
     const body = req.body;
+    if (body === {}) throw new Error('Empty udpate object');
     if (!!body?.id) throw new Error('Id should not be here');
 
     const emailFormat = /^\w+([.-]?\w+)*@gmail.com/;
@@ -49,6 +50,7 @@ const updateUserValid = (req, res, next) => {
 
     const userSchemaKeys = Object.keys(user);
     const bodyKeys = Object.keys(body);
+    if (!bodyKeys.length) throw new Error('Empty object');
     bodyKeys.forEach((key) => {
       if (!userSchemaKeys.includes(key)) throw new Error('Unexpected property');
       switch (key) {

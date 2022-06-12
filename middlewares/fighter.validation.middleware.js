@@ -11,6 +11,8 @@ const createFighterValid = (req, res, next) => {
 
     Object.keys(req.body).forEach((item) => {
       if (!fighter.hasOwnProperty(item)) throw new Error('Redundant property');
+      if (typeof req.body[item] !== typeof fighter[item])
+        throw new Error('Unexpected type of property');
     });
 
     if (power < 1 || power > 100) throw new Error(msg);
@@ -33,8 +35,10 @@ const updateFighterValid = (req, res, next) => {
     if (!!body?.id) throw new Error('Id should not be here');
     const fighterSchema = Object.keys(fighter);
     const bodyKeys = Object.keys(body);
+    if (!bodyKeys.length) throw new Error('Empty object');
     bodyKeys.forEach((key) => {
       if (!fighterSchema.includes(key)) throw new Error('Unexpected property');
+      if (typeof body[key] !== typeof fighter[key]) throw new Error('Unexpected type of property');
       switch (key) {
         case 'health':
           if (body.health < 80 || body.health > 120) throw new Error(msg);
